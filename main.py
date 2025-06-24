@@ -9,7 +9,7 @@ def render_image(path, name):
     mesh = o3d.io.read_triangle_mesh(path+"/"+name)
     mesh.compute_vertex_normals()
 
-    R = mesh.get_rotation_matrix_from_axis_angle([-(np.pi / 2), 0, 0])  # radians
+    R = mesh.get_rotation_matrix_from_axis_angle([-(np.pi / 2), 0, 0])  # Object rotation
     mesh.rotate(R, center=mesh.get_center())
 
     material = rendering.MaterialRecord()
@@ -19,7 +19,7 @@ def render_image(path, name):
     renderer = rendering.OffscreenRenderer(width, height)
 
     scene = renderer.scene
-    scene.set_background([1.0, 1.0, 1.0, 1.0])  # White background
+    scene.set_background([1.0, 1.0, 1.0, 1.0])  # Background color
     scene.add_geometry("mesh", mesh, material)
 
     bbox = mesh.get_axis_aligned_bounding_box()
@@ -44,8 +44,8 @@ def main():
         return
     
     arr = os.listdir(sys.argv[1])
-    print(arr)
     stls =  [p for p in arr if p.endswith('.stl')]
+    print("Total amount of stl's :", len(arr))
     count = 0
     for stl in stls:
         render_image(sys.argv[1], stl)
